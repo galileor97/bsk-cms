@@ -10,7 +10,7 @@ const AddUser = () => {
     const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [phone, setPhone] = useState()
+    const [phoneNumber, setPhoneNumber] = useState()
     const [address, setAddress] = useState('')
 
 
@@ -18,7 +18,7 @@ const AddUser = () => {
 
     const addNewUser = async (e) => {
         e.preventDefault()
-        const reqBody = { username, email, password, phone, address }
+        const reqBody = { username, email, password, phoneNumber, address }
 
         try {
             await ProductRequest({

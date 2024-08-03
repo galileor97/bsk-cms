@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom';
 
 
 const Dashboard = () => {
+    
 
     const [products, setProducts] = useState([])
 
@@ -35,6 +36,51 @@ const Dashboard = () => {
     }
 
     const deleteProduct = async (id) => {
+        
+        const result = await Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        });
+    
+        if (result.isConfirmed) {
+            try {
+                await ProductRequest({
+                    url: `/products/${id}`,
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                getAllProduct();
+                Swal.fire({
+                    title: 'Deleted!',
+                    text: 'Product has been deleted.',
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6'
+                });
+            } catch (error) {
+                console.log(error.response);
+                if (error.response.status === 403) {
+                    Swal.fire({
+                        title: 'Unauthorized!',
+                        text: 'You are not authorized to perform this action.',
+                        icon: 'error'
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Failed to delete the product.',
+                        icon: 'error'
+                    });
+                }
+            }
+        }
+
         try {
             await ProductRequest({
                 url: `/products/${id}`,
